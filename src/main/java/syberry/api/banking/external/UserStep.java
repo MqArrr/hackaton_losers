@@ -7,8 +7,8 @@ import java.util.Map;
 
 @Data
 public class UserStep {
-    private int bank = NATIONAL;
-    private int curr = USD;
+    private int bank = NOT_SET;
+    private int curr = NOT_SET;
 
     public static final int NATIONAL = 0, BELARUS = 1, ALPHA = 2;
     public static final int USD = 0;

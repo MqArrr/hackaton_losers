@@ -145,6 +145,10 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
         String formattedText = "";
         if(!userSteps.containsKey(uid))
             userSteps.put(uid, new UserStep());
+        if(userSteps.get(uid).getBank() == UserStep.NOT_SET) {
+            sendMessage(chatId, "Сначала выбери банк!");
+            return;
+        }
         userSteps.get(uid).setCurr(UserStep.USD);
         System.out.println("usd");
         formattedText = "Вы выбрали доллар";
@@ -155,6 +159,10 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
         String formattedText = "";
         if(!userSteps.containsKey(uid))
             userSteps.put(uid, new UserStep());
+        if(userSteps.get(uid).getBank() == UserStep.NOT_SET) {
+            sendMessage(chatId, "Сначала выбери банк!");
+            return;
+        }
         userSteps.get(uid).setCurr(UserStep.EUR);
         System.out.println("eur");
         formattedText = "Вы выбрали евро";
@@ -166,6 +174,10 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
         String formattedText = "";
         if(!userSteps.containsKey(uid))
             userSteps.put(uid, new UserStep());
+        if(userSteps.get(uid).getBank() == UserStep.NOT_SET) {
+            sendMessage(chatId, "Сначала выбери банк!");
+            return;
+        }
         userSteps.get(uid).setCurr(UserStep.JPY);
         System.out.println("jpy");
         formattedText = "Вы выбрали йену";
@@ -177,9 +189,13 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
         String formattedText = "";
         if(!userSteps.containsKey(uid))
             userSteps.put(uid, new UserStep());
+        if(userSteps.get(uid).getBank() == UserStep.NOT_SET || userSteps.get(uid).getCurr() == UserStep.NOT_SET) {
+            sendMessage(chatId, "Сначала заполни поля!");
+            return;
+        }
         formattedText += "Валюта: " + UserStep.currencyMap.get(userSteps.get(uid).getCurr());
         formattedText += ", банк " + UserStep.bankMap.get(userSteps.get(uid).getBank());
-        formattedText += ", курс: ";
+        formattedText += ", курс: а я не сделал(((";
         sendMessage(chatId, formattedText);
     }
 
