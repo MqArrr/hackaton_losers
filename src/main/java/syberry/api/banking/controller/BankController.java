@@ -1,23 +1,37 @@
 package syberry.api.banking.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import syberry.api.banking.service.impl.BankServiceImpl;
+import syberry.api.banking.entity.Currency;
+import syberry.api.banking.service.BankServiceFactory;
+import syberry.api.banking.service.impl.BelarusBankServiceImpl;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/banks")
+@RequiredArgsConstructor
 public class BankController {
-    private final BankServiceImpl bankService;
+    private final BankServiceFactory bankServiceFactory;
 
-    public BankController(BankServiceImpl bankService) {
-        this.bankService = bankService;
-    }
+    private final BelarusBankServiceImpl belarusBankServiceService;
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<?> getAll() {
-        return new ResponseEntity<>(bankService.getAll(), HttpStatus.OK);
+        return new ResponseEntity<>(belarusBankServiceService.getCurrencies(), HttpStatus.OK);
     }
+
+    @GetMapping("{bankName}/currencies")
+    public ResponseEntity<List<Currency>> getCurrenciesByBankName(
+            @PathVariable String bankName
+    ) {
+        var service = bankServiceFactory.createByBankName(bankName);
+        return ResponseEntity.ok(service.getCurrencies());
+    }
+
 }

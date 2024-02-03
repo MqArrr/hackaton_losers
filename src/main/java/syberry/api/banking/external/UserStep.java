@@ -15,6 +15,7 @@ public class UserStep {
     public static final int EUR = 1;
     public static final int JPY = 2;
     public static final int GBP = 3;
+    public static final int NOT_SET = -1;
 
 
     public static final Map<Integer, String> bankMap = new HashMap<>();

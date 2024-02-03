@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "url.currencies.alfa-bank",
+      "type": "java.lang.String",
+      "description": "Description for url.currencies.alfa-bank."
+  }
+] }

@@ -2,18 +2,23 @@ package syberry.api.banking.external.bot;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import syberry.api.banking.controller.BankController;
 import syberry.api.banking.external.UserStep;
 
 import java.util.HashMap;
 
 @Component
 public class ExchangeRatesBot extends TelegramLongPollingBot {
+
+
+    private static BankController bankController;
 
     private static final HashMap<String, UserStep> userSteps = new HashMap<>();
     private static final Logger LOG = LoggerFactory.getLogger(ExchangeRatesBot.class);
@@ -37,9 +42,10 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
     private static final String HELP = "/help";
     private static final String NOW = "/now";
 
-
-    public ExchangeRatesBot(@Value("${bot.token}") String botToken) {
+    @Autowired
+    public ExchangeRatesBot(@Value("${bot.token}") String botToken, BankController bankController) {
         super(botToken);
+        this.bankController = bankController;
     }
 
     @Override
@@ -47,6 +53,8 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
         if (!update.hasMessage() || !update.getMessage().hasText()) {
             return;
         }
+
+
         var message = update.getMessage().getText();
         var chatId = update.getMessage().getChatId();
 
@@ -172,7 +180,6 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
         formattedText += "Валюта: " + UserStep.currencyMap.get(userSteps.get(uid).getCurr());
         formattedText += ", банк " + UserStep.bankMap.get(userSteps.get(uid).getBank());
         formattedText += ", курс: ";
-
         sendMessage(chatId, formattedText);
     }
 
@@ -196,10 +203,6 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
             s = us.toString();
         sendMessage(chatId, s);
     }
-    private void calc(Long chatId, String uid){
-
-    }
-
 
 
     private void helpCommand(Long chatId) {
