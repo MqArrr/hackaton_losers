@@ -10,6 +10,5 @@ public class ExternalService {
         RestTemplate template = new RestTemplate();
         var object = template.getForObject(url, String.class);
         return object;
-
     }
 }
