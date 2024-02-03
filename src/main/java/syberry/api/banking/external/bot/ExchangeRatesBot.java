@@ -196,8 +196,7 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
                 Для выбора банка воспользуйтесь командами:
                 /national - Нацбанк
                 /belarus - Беларусбанк
-                /alpha - Альфа банк
-                                
+                /alpha - Альфа банк                
                 """;
         sendMessage(chatId, text);
     }
