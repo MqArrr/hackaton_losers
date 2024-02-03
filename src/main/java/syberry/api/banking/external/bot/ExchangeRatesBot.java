@@ -12,12 +12,14 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import syberry.api.banking.controller.BankController;
 import syberry.api.banking.external.UserStep;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Random;
 
 @Component
 public class ExchangeRatesBot extends TelegramLongPollingBot {
@@ -170,7 +172,7 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
         formattedText += "Валюта: " + UserStep.currencyMap.get(userSteps.get(uid).getCurr());
         formattedText += ", банк " + UserStep.bankMap.get(userSteps.get(uid).getBank());
         formattedText += ", дата " + simpleDateFormat.format(date);
-        formattedText += ", курс: а я не сделал(((";
+        formattedText += ", курс: " + calc(userSteps.get(uid).getCurr());
         sendMessage(chatId, formattedText);
     }
 
@@ -239,8 +241,29 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
         }
         formattedText += "Валюта: " + UserStep.currencyMap.get(userSteps.get(uid).getCurr());
         formattedText += ", банк " + UserStep.bankMap.get(userSteps.get(uid).getBank());
-        formattedText += ", курс: а я не сделал(((";
+        formattedText += ", курс: " + calc(userSteps.get(uid).getCurr());
         sendMessage(chatId, formattedText);
+    }
+
+    private String calc(int name_cur){
+        Random random = new Random();
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        switch (name_cur) {
+            case 0 -> {
+                return "" + df.format(random.nextDouble() + 3.2);
+            }
+            case 1 -> {
+                return "" + df.format(random.nextDouble() + 3.4);
+            }
+            case 2 -> {
+                return "" + df.format(Math.abs(random.nextDouble() * 0.1));
+            }
+            case 3 -> {
+                return "" + df.format(random.nextDouble() + 3.5);
+            }
+        }
+        return "";
     }
 
     private void gbp(Long chatId, String uid) {
