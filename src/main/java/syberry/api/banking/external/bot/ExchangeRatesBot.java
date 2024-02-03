@@ -2,7 +2,6 @@ package syberry.api.banking.external.bot;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -10,10 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import syberry.api.banking.external.UserStep;
-import syberry.api.banking.external.exception.ServiceException;
-import syberry.api.banking.external.service.ExchangeRatesService;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 
 @Component
@@ -21,6 +17,11 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
 
     private static final HashMap<String, UserStep> userSteps = new HashMap<>();
     private static final Logger LOG = LoggerFactory.getLogger(ExchangeRatesBot.class);
+
+    private static final int USDNUM = 431;
+    private static final int GBPNUM = 429;
+    private static final int EURNUM = 451;
+    private static final int JPYNUM = 508;
 
     private static final String START = "/start";
     private static final String BELARUS = "/belarus";
@@ -34,9 +35,8 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
     private static final String STATE = "/state";
 
     private static final String HELP = "/help";
+    private static final String NOW = "/now";
 
-    @Autowired
-    private ExchangeRatesService exchangeRatesService;
 
     public ExchangeRatesBot(@Value("${bot.token}") String botToken) {
         super(botToken);
@@ -65,6 +65,7 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
             case GBP -> gbp(chatId, uid);
             case HELP -> helpCommand(chatId);
             case STATE -> state(chatId, uid);
+            case NOW -> now(chatId, uid);
             default -> unknownCommand(chatId);
         }
     }
@@ -78,12 +79,19 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
         var text = """
                 Добро пожаловать в бот, %s!
                 
-                Здесь Вы сможете узнать официальные курсы валют на сегодня, установленные ЦБ РФ.
-                
-                Для этого воспользуйтесь командами:
-                /alpha - курс альфабанка
-                /national - курс нацбанка
-                /belarus - курс беларусбанка
+                Справочная информация по боту
+                                            
+                Для получения текущих курсов валют воспользуйтесь командами:
+                /usd - курс доллара
+                /eur - курс евро
+                /jpy - курс йены
+                /gbp - курс фунта
+                                            
+                Для выбора банка воспользуйтесь командами:
+                /national - Нацбанк
+                /belarus - Беларусбанк
+                /alpha - Альфа банк
+                /now- получить курс на сегодня
                 
                 Дополнительные команды:
                 /help - получение справки
@@ -104,7 +112,7 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
     }
 
     private void alpha(Long chatId, String uid) {
-        String formattedText = "";
+        String formattedText;
         if(!userSteps.containsKey(uid))
             userSteps.put(uid, new UserStep());
         userSteps.get(uid).setBank(UserStep.ALPHA);
@@ -157,6 +165,17 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
         sendMessage(chatId, formattedText);
     }
 
+    private void now(Long chatId, String uid){
+        String formattedText = "";
+        if(!userSteps.containsKey(uid))
+            userSteps.put(uid, new UserStep());
+        formattedText += "Валюта: " + UserStep.currencyMap.get(userSteps.get(uid).getCurr());
+        formattedText += ", банк " + UserStep.bankMap.get(userSteps.get(uid).getBank());
+        formattedText += ", курс: ";
+
+        sendMessage(chatId, formattedText);
+    }
+
     private void gbp(Long chatId, String uid) {
         String formattedText = "";
         if(!userSteps.containsKey(uid))
@@ -196,7 +215,9 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
                 Для выбора банка воспользуйтесь командами:
                 /national - Нацбанк
                 /belarus - Беларусбанк
-                /alpha - Альфа банк                
+                /alpha - Альфа банк
+                /now - курс
+                По умолчанию выбран доллар и Нацбанк.               
                 """;
         sendMessage(chatId, text);
     }

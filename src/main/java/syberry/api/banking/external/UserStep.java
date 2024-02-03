@@ -2,6 +2,9 @@ package syberry.api.banking.external;
 
 import lombok.Data;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Data
 public class UserStep {
     private int bank = NATIONAL;
@@ -14,5 +17,17 @@ public class UserStep {
     public static final int GBP = 3;
 
 
+    public static final Map<Integer, String> bankMap = new HashMap<>();
+    public static final Map<Integer, String> currencyMap = new HashMap<>();
+    {
+        bankMap.put(0, "Нацбанк");
+        bankMap.put(1, "Беларусбанк");
+        bankMap.put(2, "Альфа банк");
+        currencyMap.put(0, "USD");
+        currencyMap.put(1, "EUR");
+        currencyMap.put(2, "JPY");
+        currencyMap.put(3, "GBP");
+
+    }
 
 }
