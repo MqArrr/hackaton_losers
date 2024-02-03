@@ -25,7 +25,7 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
     private static final String START = "/start";
     private static final String BELARUS = "/belarus";
     private static final String NATIONAL = "/national";
-    private static final String ALPHA = "ALPHA";
+    private static final String ALPHA = "/alpha";
 
     private static final String USD = "/usd";
     private static final String EUR = "/eur";
@@ -196,8 +196,7 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
                 Для выбора банка воспользуйтесь командами:
                 /national - Нацбанк
                 /belarus - Беларусбанк
-                /alpha - Альфа банк
-                                
+                /alpha - Альфа банк                
                 """;
         sendMessage(chatId, text);
     }
