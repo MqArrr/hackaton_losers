@@ -1,2 +1,9 @@
-package syberry.api.banking.config;public class MainConfig {
+package syberry.api.banking.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+@Configuration
+@EnableWebMvc
+public class MainConfig {
 }
