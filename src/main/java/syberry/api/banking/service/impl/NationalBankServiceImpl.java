@@ -13,15 +13,15 @@ import java.util.List;
 @Service("NATIONALBANK")
 @RequiredArgsConstructor
 public class NationalBankServiceImpl implements BankService {
-    @Value("${url.currencies.national-bank}")
-    public static String url;
+//    @Value("${url.currencies.national-bank}")
+    public static String url = "https://api.nbrb.by/exrates/currencies";
     private final CurrencyMapperImpl currencyMapperImpl;
     private final ExternalService externalService;
 
     @Override
     public List<Currency> getCurrencies() {
         var currenciesInString = externalService.getCurrencies(url);
-        var currenciesList = currencyMapperImpl.stringToCurrencyList(currenciesInString);
+        var currenciesList = currencyMapperImpl.stringToCurrencyList(currenciesInString,"NATIONALBANK" );
         return currenciesList;
     }
 

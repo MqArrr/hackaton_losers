@@ -11,7 +11,6 @@ import syberry.api.banking.service.BankService;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service("BELARUSBANK")
 @RequiredArgsConstructor
@@ -23,7 +22,7 @@ public class BelarusBankServiceImpl implements BankService {
 
     public List<Currency> getCurrencies() {
         var currenciesInString = externalService.getCurrencies(url);
-        var currenciesList = currencyMapperImpl.stringToCurrencyList(currenciesInString);
+        var currenciesList = currencyMapperImpl.stringToCurrencyList(currenciesInString, "BELARUSBANK");
         return currenciesList;
     }
 

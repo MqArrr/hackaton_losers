@@ -22,7 +22,7 @@ public class AlfaBankServiceImpl implements BankService {
 
     public List<Currency> getCurrencies() {
         var currenciesInString = externalService.getCurrencies(url);
-        var currenciesList = currencyMapperImpl.stringToCurrencyList(currenciesInString);
+        var currenciesList = currencyMapperImpl.stringToCurrencyList(currenciesInString, "ALFABANK");
         return currenciesList;
     }
 

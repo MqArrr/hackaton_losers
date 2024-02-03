@@ -11,18 +11,18 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public abstract class BaseBankService {
-    private final CurrencyMapperImpl currencyMapperImpl;
-    private final ExternalService externalService;
+//    private final CurrencyMapperImpl currencyMapperImpl;
+//    private final ExternalService externalService;
+//
+//    public List<Currency> getCurrencies(String url) {
+//        var currenciesInString = externalService.getCurrencies(url);
+//       return currencyMapperImpl.stringToCurrencyList(currenciesInString);
+//
+//   }=
 
-    public List<Currency> getCurrencies(String url) {
-        var currenciesInString = externalService.getCurrencies(url);
-       return currencyMapperImpl.stringToCurrencyList(currenciesInString);
-
-    }
-
-    public List<Currency> getCurrenciesByDate(String url, String currencyCode, Date date) {
-        return getCurrencies(url).stream()
-                .filter(currency -> currency.getCurCode().equals(currencyCode) && currency.getCurDateStart().equals(date))
-                .collect(Collectors.toList());
-    }
+//    public List<Currency> getCurrenciesByDate(String url, String currencyCode, Date date) {
+//        return getCurrencies(url).stream()
+//                .filter(currency -> currency.getCurCode().equals(currencyCode) && currency.getCurDateStart().equals(date))
+//                .collect(Collectors.toList());
+//    }
 }
