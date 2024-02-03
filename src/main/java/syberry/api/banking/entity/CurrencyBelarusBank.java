@@ -1,4 +1,4 @@
 package syberry.api.banking.entity;
 
-public class CurrencyBelarusBank extends Currency{
+public class CurrencyBelarusBank extends Currency {
 }

@@ -41,9 +41,8 @@ public class BankController {
             @RequestParam String bank,
             @RequestParam String date
     ) {
-        var date1 = LocalDate.parse(date);
         var service = bankServiceFactory.createByBankName(bank);
-        return ResponseEntity.ok(service.getRatesByDate(currencyCode, date1));
+        return ResponseEntity.ok(service.getRatesByDate(currencyCode, LocalDate.parse(date)));
     }
 
 }

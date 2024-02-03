@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 @Service("ALFABANK")
 @RequiredArgsConstructor
 public class AlfaBankServiceImpl implements BankService {
-    @Value("{url.currencies.alfa-bank}")
-    private String url;
+//    @Value("{url.currencies.alfa-bank}")
+    private String url = "https://developerhub.alfabank.by:8273/partner/1.0.1/public/rates";
     private final CurrencyMapperImpl currencyMapperImpl;
     private final ExternalService externalService;
 

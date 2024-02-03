@@ -17,9 +17,8 @@ public abstract class BaseBankService {
 //    public List<Currency> getCurrencies(String url) {
 //        var currenciesInString = externalService.getCurrencies(url);
 //       return currencyMapperImpl.stringToCurrencyList(currenciesInString);
+//   }
 //
-//   }=
-
 //    public List<Currency> getCurrenciesByDate(String url, String currencyCode, Date date) {
 //        return getCurrencies(url).stream()
 //                .filter(currency -> currency.getCurCode().equals(currencyCode) && currency.getCurDateStart().equals(date))

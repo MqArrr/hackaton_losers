@@ -18,11 +18,13 @@ public class CurrencyMapperImpl {
 
     public List<Currency> stringToCurrencyList(String currenciesInString, String bankName) {
         ObjectMapper objectMapper = new ObjectMapper();
+
+
         try {
              return switch (EBankName.valueOf(bankName)) {
                 case BELARUSBANK -> Arrays.asList(objectMapper.readValue(currenciesInString, CurrencyBelarusBank[].class));
 
-                 case ALFABANK -> Arrays.asList(objectMapper.readValue(currenciesInString, CurrencyAlfa[].class));
+                 case ALFABANK  -> Arrays.asList(objectMapper.readValue(currenciesInString, CurrencyAlfa[].class));
 
                  case NATIONALBANK ->Arrays.asList(objectMapper.readValue(currenciesInString, CurrencyNationalBank[].class));
             };
