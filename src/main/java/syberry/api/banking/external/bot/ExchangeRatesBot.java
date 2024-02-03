@@ -12,6 +12,11 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import syberry.api.banking.controller.BankController;
 import syberry.api.banking.external.UserStep;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 
 @Component
@@ -41,6 +46,7 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
 
     private static final String HELP = "/help";
     private static final String NOW = "/now";
+    private static final String DATE = "date";
 
     @Autowired
     public ExchangeRatesBot(@Value("${bot.token}") String botToken, BankController bankController) {
@@ -59,6 +65,14 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
         var chatId = update.getMessage().getChatId();
 
         String uid = String.valueOf(update.getMessage().getFrom().getId());
+        if(message.split(" ")[0].equals(DATE)){
+            try {
+                onDate(message.split(" ")[1], chatId, uid);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            return;
+        }
         switch (message) {
             case START -> {
                 String userName = update.getMessage().getChat().getUserName();
@@ -101,6 +115,8 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
                 /alpha - Альфа банк
                 /now- получить курс на сегодня
                 
+                введи data дни-месяцы-годы для получения курса по дате
+                
                 Дополнительные команды:
                 /help - получение справки
                 """;
@@ -127,6 +143,34 @@ public class ExchangeRatesBot extends TelegramLongPollingBot {
         System.out.println("Alpha");
         formattedText = "Вы выбрали Альфа банк";
 
+        sendMessage(chatId, formattedText);
+    }
+
+    private void onDate(String input, Long chatId, String uid) throws ParseException {
+        if(input == null){
+            sendMessage(chatId, "Ошибка даты");
+            return;
+        }
+        String formattedText = "";
+        if(!userSteps.containsKey(uid))
+            userSteps.put(uid, new UserStep());
+        if(userSteps.get(uid).getBank() == UserStep.NOT_SET || userSteps.get(uid).getCurr() == UserStep.NOT_SET) {
+            sendMessage(chatId, "Сначала заполни поля!");
+            return;
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d-M-yyyy");
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse(input);
+        } catch (ParseException e) {
+            sendMessage(chatId, "Ошибка даты");
+            return;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-M-yyyy");
+        formattedText += "Валюта: " + UserStep.currencyMap.get(userSteps.get(uid).getCurr());
+        formattedText += ", банк " + UserStep.bankMap.get(userSteps.get(uid).getBank());
+        formattedText += ", дата " + simpleDateFormat.format(date);
+        formattedText += ", курс: а я не сделал(((";
         sendMessage(chatId, formattedText);
     }
 
